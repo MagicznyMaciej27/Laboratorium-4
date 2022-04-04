@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int size=0;
+
+void heapify(int tab[], int size, int i) // wprowadzamy wielkość kopca size i indeks w tablicy i
+{
+    if (size==2){
+        printf("Tylko jedno dziecko");
+    }
+    else {
+        int max=i; // (zakładamy, że obecny element jest największy)
+        int left=2*i+1; // wyliczamy indeks lewego dziecka zgodnie ze wzorem
+        int right=left+1; // wyliczamy indeks prawego dziecka zgodnie ze wzorem
+
+    if (left<size && tab[left]>tab[max]){ // jeśli indeks lewego dziecka jest mniejszy od wielkości kopca i indeks lewego dziecka jest większy od maxa
+            max=left; // zmieniamy max na wartość lewego dziecka
+    }
+    if (right<size && tab[right]>tab[max]){ // jeśli indeks prawego dziecka jest mniejszy od wielkości kopca i indeks prawego dziecka jest większy od maxa
+            max=right; // zmieniamy max na wartość prawego dziecka
+    }
+
+    // sprawdzanie wielkości kopca ma na celu sprawdzenie, czy wartość liczbowa indeksu nie wychodzi poza tablicę
+
+
+    if (max!=i){
+            change(&tab[i], &tab[max]); // formuła wzięta z pliku Laboratorium 04
+            heapify(tab, size, max); // wywołujemy rekurencyjnie heapify(tab, size, max)
+        }
+}
+}
+void change(int *x, int*y)
+{
+    int temp=*y;
+    *y=*x;
+    *x=temp;
+} //umieszczamy funkcję change
+
+void insert(int tab[], int newValue) // tworzymy nową tablicę i nową wartość dodaną do kopca
+{
+    if (size==0){ // dla pustej tablicy zwiększamy size o 1
+        tab[0]=newValue;
+        size++;
+    }
+    else{
+        tab[size]=newValue; //przypisujemy size dla nowej wartości
+        size++; //zwiększamy size o 1
+
+        for (int i=size/2-1; i>=0; i--){ // wprowadzamy i jako indeks rodzica
+            heapify(tab, size, i); //wykonujemy rekurencyjnie heapify
+        }
+    }
+}
+
+void deleteRoot(int tab[], int deleteNum) //usuwamy elementy z kopca
+{
+    change(&tab[0], &tab[size-1]); // wstawiamy ostatni element w miejsce korzenia
+    size--; //zmniejszamy wartość o 1
+    heapify(tab, size, 0); //wykonujemy rekurencyjnie heapify
+}
+
+int main()
+{
+    int tab[10]; //wprowadzamy tablicę
+
+    for (int i=0; i<10; i++){
+        insert(tab, (rand()%51));
+    }
+
+    printf("\n heap: \n");
+    for (int i=0; i<10; i++){ //wprowadzamy pętlę która pozwoli wydrukować wszystkie elementy
+        printf(" %d", tab[i]); //drukujemy wynik
+    }
+
+    return 0;
+}
